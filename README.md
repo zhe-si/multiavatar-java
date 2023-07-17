@@ -1,4 +1,4 @@
-# Multiavatar #
+# Multiavatar for Java #
 
 <img src="https://raw.githubusercontent.com/multiavatar/Multiavatar/main/logo.png?v=001" width="65">
 
@@ -10,32 +10,47 @@ Initially coded in JavaScript, this version of Multiavatar is re-created in Java
 
 For more details about the Multiavatar Generator, please refer to the readme available in the JS [repository](https://github.com/multiavatar/Multiavatar).
 
+为您的网站、社区或应用程序提供海量基于名称的头像。Multiavatar 在 Java 语言的非官方实现。
 
 ### Installation ###
 
-Install Multiavatar with pip:
+Install Multiavatar with download jar:
 
-`pip install multiavatar`
-
-Import Multiavatar in your Python code:
-
-`from multiavatar.multiavatar import multiavatar`
-
+- Download release jar and import in project.
+- If use maven, you can copy `multiavatar-1.0.0.jar` into `lib` folder of project directory and add this config in `pom.xml`.
+  ```
+  <dependency>
+      <groupId>com.zhesi</groupId>
+      <artifactId>multiavatar</artifactId>
+      <version>1.0.0</version>
+      <scope>system</scope>
+      <systemPath>${project.basedir}/lib/multiavatar-1.0.0.jar</systemPath>
+  </dependency>
+  ```
 
 ### Usage ###
 
 ```
-svgCode = multiavatar("Binx Bond", None, None);
-print(svgCode)
+String avatarSvg = MultiavatarGen.genMultiavatarSvg("Binx Bond", false, null);
+Files.write(Path.of("targetpath/xxx.svg"), avatarSvg.getBytes(StandardCharsets.UTF_8));
 ```
 
-For advanced usage, pass boolean `True` as the second parameter if you wish to generate an avatar without the environment part.
+Is equal to this.
+
+```
+byte[] avatarSvgBytes = MultiavatarGen.genAvatarSvg("Binx Bond");
+Files.write(Path.of("targetpath/xxx.svg"), avatarSvgBytes);
+```
+
+For advanced usage, pass boolean `true` as the second parameter if you wish to generate an avatar without the environment part.
 
 Pass a dictionary as the third parameter to generate a specific avatar version.
 
 ```
-avatarId = "ANY_STRING"
-svgCode = multiavatar(avatarId, True, { "part": "11", "theme": "C" })
+String avatarSvg = MultiavatarGen.genMultiavatarSvg("Binx Bond", true, Map.of(
+        "part", "11",
+        "theme", "C"
+));
 ```
 
 
