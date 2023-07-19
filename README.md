@@ -53,6 +53,75 @@ String avatarSvg = MultiavatarGen.genMultiavatarSvg("Binx Bond", true, Map.of(
 ));
 ```
 
+If you want to generate a png type avatar picture, you can use the `batik` library of apache to convert the svg picture, you can refer to the following methods.
+
+First, introduce the batik dependency.
+
+```
+<dependency>
+    <groupId>org.apache.xmlgraphics</groupId>
+    <artifactId>batik-all</artifactId>
+    <version>1.16</version>
+</dependency>
+```
+
+You can refer to the tool class for converting svg to png images below.
+
+```java
+/**
+ * <b>SvgHelper</b>
+ * <p>
+ * svg 工具类
+ * - svg 转 png
+ * </p>
+ *
+ * @author zhe-si
+ * @version 1.0
+ */
+public class SvgHelper {
+  public static byte[] convertSvgFile2Png(byte[] svgBytes) {
+    ByteArrayInputStream svgInStream = new ByteArrayInputStream(svgBytes);
+    byte[] bytes = convertSvgFile2Png(svgInStream);
+    try {
+      svgInStream.close();
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
+    return bytes;
+  }
+
+  public static byte[] convertSvgFile2Png(InputStream svgInStream) {
+    ByteArrayOutputStream pngOutStream = new ByteArrayOutputStream();
+    convert2Png(svgInStream, pngOutStream);
+    byte[] byteArray = pngOutStream.toByteArray();
+    try {
+      pngOutStream.close();
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
+    return byteArray;
+  }
+
+  public static void convert2Png(InputStream svgInStream, OutputStream pngOutStream) {
+    Transcoder tr = new PNGTranscoder();
+    try {
+      TranscoderInput input = new TranscoderInput(svgInStream);
+      TranscoderOutput output = new TranscoderOutput(pngOutStream);
+      tr.transcode(input, output);
+    } catch (TranscoderException e) {
+      throw new RuntimeException(e);
+    }
+  }
+}
+```
+
+A complete example of generating png is as follows.
+
+```
+byte[] avatarSvgBytes = MultiavatarGen.genAvatarSvg("Binx Bond");
+byte[] avatarPngBytes = SvgHelper.convertSvgFile2Png(avatarSvgBytes);
+```
+
 
 ### Testing ###
 
